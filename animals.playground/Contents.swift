@@ -29,7 +29,8 @@ var parsedAnimalsJSON = try! NSJSONSerialization.JSONObjectWithData(rawAnimalsJS
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
     /* Start playing with JSON here... */
-    
+    let photosDictionary = dictionary[Constants.JSONResponseKeys.Photos] as? [String:AnyObject]
+    print(photosDictionary)
 }
 
 struct Constants {
