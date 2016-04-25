@@ -25,4 +25,15 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
     
 }
 
+struct Constants {
+    struct JSONResponseKeys {
+        static let Photos = "photos"
+        static let Photo = "photo"
+    }
+    
+    struct JSONResponseValues {
+        static let OKStatus = "ok"
+    }
+}
+
 parseJSONAsDictionary(parsedAnimalsJSON)
