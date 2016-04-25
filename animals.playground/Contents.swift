@@ -18,27 +18,11 @@ var rawAnimalsJSON = NSData(contentsOfFile: pathForAnimalsJSON!)
 var parsingAnimalsError: NSError? = nil
 
 /* Parse the data into usable form */
-do {
 var parsedAnimalsJSON = try! NSJSONSerialization.JSONObjectWithData(rawAnimalsJSON!, options: .AllowFragments) as! NSDictionary
-} catch {
-    print("Could not parse the data as JSON: '\(rawAnimalsJSON)")
-}
-
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
     /* Start playing with JSON here... */
     
-}
-
-struct Constants {
-    struct JSONResponseKeys {
-        static let Photos = "photos"
-        static let Photo = "photo"
-    }
-    
-    struct JSONResponseValues {
-        static let OKStatus = "ok"
-    }
 }
 
 parseJSONAsDictionary(parsedAnimalsJSON)
