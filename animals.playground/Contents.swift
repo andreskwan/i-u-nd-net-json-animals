@@ -18,11 +18,13 @@ var rawAnimalsJSON = NSData(contentsOfFile: pathForAnimalsJSON!)
 var parsingAnimalsError: NSError? = nil
 
 /* Parse the data into usable form */
-do {
-    var parsedAnimalsJSON = try! NSJSONSerialization.JSONObjectWithData(rawAnimalsJSON!, options: .AllowFragments) as! NSDictionary
-} catch {
-    print("Could not parse the data as JSON: '\(rawAnimalsJSON)")
-}
+//let parsedAnimalsJSON:AnyObject?
+
+//do {
+var parsedAnimalsJSON = try! NSJSONSerialization.JSONObjectWithData(rawAnimalsJSON!, options: .AllowFragments) as! NSDictionary
+//} catch {
+//    print("Could not parse the data as JSON: '\(rawAnimalsJSON)")
+//}
 
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
