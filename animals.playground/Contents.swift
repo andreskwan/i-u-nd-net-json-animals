@@ -32,26 +32,32 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
     
     guard let photosDictionary = dictionary[Constants.JSONResponseKeys.Photos] as? [String:AnyObject]
         else {
-            //error message
+            //error extracting the photosDictionary from the JSON represented by a NSDictionary
             return
     }
     
     print(photosDictionary)
     
-    guard let photoArray = photosDictionary[Constants.JSONResponseKeys.Photo] as? [[String:AnyObject]]
+    guard let arrayOfPhotoDictionaries = photosDictionary[Constants.JSONResponseKeys.Photo] as? [[String:AnyObject]]
         else {
+            //error extracting array of photos from the photosDictionary
+            print("Cannot find key 'photo' in \(photosDictionary)")
             return
     }
     
-    print(photoArray)
-    print(photoArray.count)
-    print(photoArray[2])
-    print(photoArray[2]["url_m"])
+    //how many photos are in the JSON
+    print("how many photos are in the JSON: \(arrayOfPhotoDictionaries.count)")
+    print("URL of the image referenced by index 3 \(arrayOfPhotoDictionaries[2]["url_m"])")
+    
     var indexValue = 0
-    for photo in (photoArray as? [[String:AnyObject]])!{
+    for photo in arrayOfPhotoDictionaries {
         
-        let content = photo["comment"]!["_content"] as? String
-        if ((content!.rangeOfString("interrufftion")) != nil) {
+        guard let content = photo["comment"]!["_content"] as? String
+            else {
+                //do I need to return in this case? I don't think so!
+                return
+        }
+        if ((content.rangeOfString("interrufftion")) != nil) {
             print("index: \(indexValue)")
             print(content)
         }
