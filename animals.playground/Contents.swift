@@ -29,28 +29,35 @@ var parsedAnimalsJSON = try! NSJSONSerialization.JSONObjectWithData(rawAnimalsJS
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
     /* Start playing with JSON here... */
-    let photosDictionary = dictionary[Constants.JSONResponseKeys.Photos] as? [String:AnyObject]
+    
+    guard let photosDictionary = dictionary[Constants.JSONResponseKeys.Photos] as? [String:AnyObject]
+        else {
+            //error message
+            return
+    }
+    
     print(photosDictionary)
     
-    let photoArray:AnyObject?
-    
-    if let photosDictionary = photosDictionary {
-        photoArray = photosDictionary[Constants.JSONResponseKeys.Photo] as? [[String:AnyObject]]
-        print(photoArray!)
-        print(photoArray?.count)
-        print(photoArray![2])
-        print(photoArray![2]["url_m"])
-        var indexValue = 0
-        for photo in (photoArray as? [[String:AnyObject]])!{
-            
-            let content = photo["comment"]!["_content"] as? String
-            if ((content!.rangeOfString("interrufftion")) != nil) {
-                print("index: \(indexValue)")
-                print(content)
-            }
-            indexValue += 1
-        }
+    guard let photoArray = photosDictionary[Constants.JSONResponseKeys.Photo] as? [[String:AnyObject]]
+        else {
+            return
     }
+    
+    print(photoArray)
+    print(photoArray.count)
+    print(photoArray[2])
+    print(photoArray[2]["url_m"])
+    var indexValue = 0
+    for photo in (photoArray as? [[String:AnyObject]])!{
+        
+        let content = photo["comment"]!["_content"] as? String
+        if ((content!.rangeOfString("interrufftion")) != nil) {
+            print("index: \(indexValue)")
+            print(content)
+        }
+        indexValue += 1
+    }
+
 }
 
 struct Constants {
