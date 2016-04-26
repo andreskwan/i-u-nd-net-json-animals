@@ -47,6 +47,13 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
     
     //how many photos are in the JSON
     print("how many photos are in the JSON: \(arrayOfPhotoDictionaries.count)")
+    
+    for (index, photo) in arrayOfPhotoDictionaries.enumerate() {
+        
+        if index == 2 {
+            print("\(index): \(photo["url_m"])")
+        }
+    }
     print("URL of the image referenced by index 3 \(arrayOfPhotoDictionaries[2]["url_m"])")
     
     var indexValue = 0
