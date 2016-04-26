@@ -18,14 +18,7 @@ var rawAnimalsJSON = NSData(contentsOfFile: pathForAnimalsJSON!)
 var parsingAnimalsError: NSError? = nil
 
 /* Parse the data into usable form */
-//let parsedAnimalsJSON:AnyObject?
-
-//do {
 var parsedAnimalsJSON = try! NSJSONSerialization.JSONObjectWithData(rawAnimalsJSON!, options: .AllowFragments) as! NSDictionary
-//} catch {
-//    print("Could not parse the data as JSON: '\(rawAnimalsJSON)")
-//}
-
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
     /* Start playing with JSON here... */
@@ -33,10 +26,9 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
     guard let photosDictionary = dictionary[Constants.JSONResponseKeys.Photos] as? [String:AnyObject]
         else {
             //error extracting the photosDictionary from the JSON represented by a NSDictionary
+            print("Cannot find key 'photos' in \(parsedAnimalsJSON)")
             return
     }
-    
-    print(photosDictionary)
     
     guard let arrayOfPhotoDictionaries = photosDictionary[Constants.JSONResponseKeys.Photo] as? [[String:AnyObject]]
         else {
@@ -47,36 +39,39 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
     
     //how many photos are in the JSON
     print("how many photos are in the JSON: \(arrayOfPhotoDictionaries.count)")
+    guard let total = photosDictionary[Constants.JSONResponseKeys.TotalPhotos] as? Int else {
+        print("Cannot find key 'total' in \(photosDictionary)")
+        return
+    }
+    
+    print("total number of fotos: \(total)")
     
     for (index, photo) in arrayOfPhotoDictionaries.enumerate() {
-        
-        if index == 2 {
-            print("\(index): \(photo["url_m"])")
+        guard let commentDictionary = photo[Constants.JSONResponseKeys.Comment] as? [String:AnyObject] else {
+            //do I need to return in this case? I don't think so!
+            return
         }
-    }
-    print("URL of the image referenced by index 3 \(arrayOfPhotoDictionaries[2]["url_m"])")
-    
-    var indexValue = 0
-    for photo in arrayOfPhotoDictionaries {
-        
-        guard let content = photo["comment"]!["_content"] as? String
-            else {
-                //do I need to return in this case? I don't think so!
-                return
+        guard let content = commentDictionary[Constants.JSONResponseKeys.Content] as? String else {
+            return
         }
         if ((content.rangeOfString("interrufftion")) != nil) {
-            print("index: \(indexValue)")
+            print("index: \(index)")
             print(content)
         }
-        indexValue += 1
+        if let photoURL = photo[Constants.JSONResponseKeys.URLMedia] as? String where index == 2 {
+            print(photoURL)
+        }
     }
-
 }
 
 struct Constants {
     struct JSONResponseKeys {
         static let Photos = "photos"
         static let Photo = "photo"
+        static let TotalPhotos = "total"
+        static let Comment = "comment"
+        static let Content = "_content"
+        static let URLMedia = "url_m"
     }
     
     struct JSONResponseValues {
