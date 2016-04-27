@@ -22,6 +22,60 @@ var parsedHearthstoneJSON = try! NSJSONSerialization.JSONObjectWithData(rawHeart
 
 func parseJSONAsDictionary(dictionary: NSDictionary) {
     /* Start playing with JSON here... */
+    guard let arrayOfGameElements = parsedHearthstoneJSON[Constants.JSONKeys.Basic] as? [[String:AnyObject]] else {
+        print("can't find value for key: \(Constants.JSONKeys.Basic) on JSON: \(parsedHearthstoneJSON)")
+        return
+    }
+    
+    print(arrayOfGameElements.count)
+    var minionsAtFiveDollars = 0
+    var minionsWithBattleCry = 0
+    var minionCostArray = [Int]()
+    for (index, gameElementDictionary) in arrayOfGameElements.enumerate() {
+        guard let type = gameElementDictionary["type"] as? String else {
+            print("can't find type")
+            return
+        }
+        
+        if type == "Minion" {
+            guard let minionCost = gameElementDictionary["cost"] as? Int else {
+                print("can't find minion cost")
+                return
+            }
+            if minionCost >= 5 {
+                minionsAtFiveDollars = minionsAtFiveDollars + 1
+                print("index: \(index), cost: \(minionCost)")
+            }
+            
+            print(index)
+            print(minionCost)
+            guard let text = gameElementDictionary["text"] as? String else {
+                print("can't find values for \"text\" key")
+                return
+            }
+            if text.rangeOfString("Battlecry") != nil {
+                minionsWithBattleCry = minionsWithBattleCry + 1
+                print(text)
+            }
+        }
+        if type == "Weapon" {
+            guard let durability = gameElementDictionary["durability"] as? Int else {
+                print("can't find durabily of the element")
+                return
+            }
+            if durability == 2 {
+               print("index: \(index), durability: \(durability)")
+            }
+        }
+    }
+    print(minionsWithBattleCry)
+    print(minionsAtFiveDollars)
 }
 
+struct Constants {
+    struct JSONKeys {
+        static let Basic = "Basic"
+        
+    }
+}
 parseJSONAsDictionary(parsedHearthstoneJSON)
