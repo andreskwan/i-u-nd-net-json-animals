@@ -62,10 +62,18 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
                     minionsWithBattleCry = minionsWithBattleCry + 1
                     print("index: \(index)")
                     print("text: \(text)")
-                    
                 }
             }
             // 4 - average cost of common minions
+            if let rarity = gameElementDictionary["rarity"] as? String {
+                print(rarity)
+                if rarity == "Common" {
+                    totalMiniosCost = totalMiniosCost + minionCost
+                    totalNumberOfMinions = totalNumberOfMinions + 1
+                    print("index: \(index)")
+                }
+            }
+            // 5
             guard let attack = gameElementDictionary["attack"] as? Float else {
                 print("can't find attack for minion at index: \(index)")
                 break
@@ -73,17 +81,7 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
             guard let health = gameElementDictionary["health"] as? Float else {
                 print("can't find health for minion at index: \(index)")
                 break
-            }
-            // problem 
-            guard let rarity = gameElementDictionary["Common"] as? String else {
-                print("can't find rarity common for minion at index: \(index)")
-                break
-            }
-            if rarity == "common" {
-                totalMiniosCost = totalMiniosCost + minionCost
-                totalNumberOfMinions = totalNumberOfMinions + 1
-                print("index: \(index)")
-            }
+            }            
             print(index)
             print(minionCost)
             // 5 - what is the average stats-to-cost-ratio = (attack + health)/cost
@@ -105,9 +103,9 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
         }
     }
     print(minionsWithBattleCry)
-//    print(minionsAtFiveDollars)
-//    print("average cost = \(totalMiniosCost)/\(totalNumberOfMinions) = \(totalMiniosCost/totalNumberOfMinions) ")
-//    print("stats-to-cost-ratio = (\(totalAttack)+\(totalHealt))/\(totalNumberOfMinions) = \( (totalAttack + totalHealt)/totalNumberOfMinions) ")
+    print(minionsAtFiveDollars)
+    print("average cost = \(totalMiniosCost)/\(totalNumberOfMinions) = \(totalMiniosCost/totalNumberOfMinions) ")
+    print("stats-to-cost-ratio = (\(totalAttack)+\(totalHealt))/\(totalCostWithoutCeroCostMinions) = \( (totalAttack + totalHealt)/totalCostWithoutCeroCostMinions) ")
 }
 
 struct Constants {
