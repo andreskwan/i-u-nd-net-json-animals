@@ -34,6 +34,40 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
     var sumOfPointValue = 0
     var achievementsWithPoints = 0
     
+    // 4 --------------------------------------------
+    var categoriesIdArray = [Int]()
+    //key is the categoryID and Int is the number of achivements whit this id
+    var categoryCount = [Int:Int]()
+    
+    guard let categoriesArrayOfDictionaries = parsedAchievementsJSON["categories"] as? [[String:AnyObject]] else {
+        print("Can't find categories in ")
+        return
+    }
+    
+    for categoryDictionary in categoriesArrayOfDictionaries {
+        
+        if let title = categoryDictionary["title"] as? String where title == "Matchmaking" {
+            print(title)
+            guard let children = categoryDictionary["children"] as? [[String:AnyObject]] else {
+                print("Can't find any children")
+                return
+            }
+            for child in children {
+                guard let categoryID = child["categoryId"] as? Int else {
+                    print("Can't find any categoryId")
+                    return
+                }
+                categoriesIdArray.append(categoryID)
+            }
+        } else {
+            print("nothing found")
+        }
+    }
+    // initialize dictionary
+    for categoryID in categoriesIdArray {
+        categoryCount[categoryID] = 0
+    }
+    
     for achievement in achievements {
         guard let points = achievement["points"] as? Int else {
             return
@@ -53,11 +87,21 @@ func parseJSONAsDictionary(dictionary: NSDictionary) {
             }
             print(description)
         }
+        // 4
+        guard let categoryID = achievement["categoryId"] as? Int else {
+            return
+        }
+        if categoriesIdArray.contains(categoryID) {
+            categoryCount[categoryID] = categoryCount[categoryID]! + 1
+        }
+    
     }
     // 1 
     print(achievementsWithPointValueGreaterThan10)
     // 2.1 average
     print(Double(sumOfPointValue)/Double(achievementsWithPoints))
+    // 4 
+    print(categoryCount)
 }
 
 parseJSONAsDictionary(parsedAchievementsJSON)
